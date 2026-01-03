@@ -18,16 +18,13 @@ runs:
         fileName: '*'
         out-file-path: 'z64packer'
         
-    - name: Copy scripts to work folder
+    - name: Copy scripts and show results
       run: |
         cp -r $GITHUB_ACTION_PATH/src/* z64packer/
+        ls -R
       shell: bash
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
-
-    - name: Display structure of downloaded files
-      run: ls -R
-      shell: bash
       
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
@@ -37,10 +34,10 @@ runs:
     - name: Install Python dependencies
       uses: py-actions/py-dependency-install@v4
       with:
-        path: "src/z64_python_requirements.txt"
+        path: "z64packer/z64_python_requirements.txt"
 
     - name: Run database fixer
-      run: python "src/z64_database_fixer.py" --ci
+      run: python "z64packer/z64_database_fixer.py" --ci
       shell: bash
 
     - name: Create GitHub Release
