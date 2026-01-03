@@ -9,6 +9,7 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
+      shell: bash
 
     - name: Download current release files if there is any
       uses: robinraju/release-downloader@v1.12
@@ -17,27 +18,32 @@ runs:
         latest: true
         fileName: '*'
         out-file-path: 'z64packer'
+      shell: bash
 
     - name: Display structure of downloaded files
       run: ls -R
+      shell: bash
       
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+      shell: bash
 
     - name: Install Python dependencies
       uses: py-actions/py-dependency-install@v4
       with:
         path: "src/z64_python_requirements.txt"
+      shell: bash
 
     - name: Run database fixer
       run: python "src/z64_database_fixer.py" --ci
+      shell: bash
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ github.token }}
       with:
         files: |
           z64packer/binaries.zip
@@ -47,3 +53,4 @@ runs:
         name: Z64 Packer Assets
         draft: false
         prerelease: false
+      shell: bash
