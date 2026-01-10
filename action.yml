@@ -1,5 +1,8 @@
 name: 'Z64 Packer Release Assets'
 description: 'Action for releasing necessary assets for repository compatibility with Z64 Music Packer'
+branding:
+  icon: 'music'
+  color: 'gray-dark'
 inputs:
   name:
     description: 'Name of the music repository'
