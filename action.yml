@@ -20,6 +20,10 @@ inputs:
     description: 'URL for an image to use as the repository avatar'
     required: false
     default: 'https://github.githubassets.com/images/gravatars/gravatar-user-420.png?size=32'
+  metadata-spreadsheet:
+    description: 'URL for a Google Docs Spreadsheet with metadata (currently only used for DJs repos, in their format)'
+    required: false
+    default: ''
     
 runs:
   using: "composite"
@@ -67,6 +71,11 @@ runs:
 
     - name: Run database fixer
       run: python "z64packer/z64_database_fixer.py" --ci
+      shell: bash
+    
+    - name: Extract metadata from datasheet if there is any
+      if: ${{ github.event.inputs.metadata-spreadsheet != '' }}
+      run: python "z64packer/z64_dj_datasheet_tool.py" --ci
       shell: bash
 
     - name: Create GitHub Release
