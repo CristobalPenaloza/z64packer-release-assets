@@ -27,19 +27,22 @@ inputs:
     description: 'URL for a Google Docs Spreadsheet with metadata (currently only used for DJs repos, in their format)'
     required: false
     default: ''
+  assets-branch:
+    description: 'The name of the branch that will store the assets'
+    required: false
+    default: 'z64packer'
     
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v3
+    - name: Checkout main branch
+      uses: actions/checkout@v6
 
-    - name: Download current release files if there is any
-      uses: robinraju/release-downloader@v1.12
+    - name: Checkout the assets branch if it exists, and put it in a folder
+      uses: actions/checkout@v6
       with:
-        tag: 'z64packer'
-        latest: true
-        fileName: '*'
-        out-file-path: 'z64packer'
+        ref: ${{ inputs.assets-branch }}
+        path: z64packer
         
     - name: Copy scripts and show results
       run: |
@@ -50,6 +53,7 @@ runs:
           --arg binaries "$INPUT_BINARIES" \
           --arg previews "$INPUT_PREVIEWS" \
           --arg avatarUrl "$INPUT_AVATAR_URL" \
+          --arg branch "$INPUT_BRANCH" \
           '$ARGS.named' > z64packer/z64musicpacker.properties
         ls -R
         head z64packer/z64musicpacker.properties
@@ -61,6 +65,7 @@ runs:
         INPUT_BINARIES: ${{ inputs.binaries-path }}
         INPUT_PREVIEWS: ${{ inputs.previews-path }}
         INPUT_AVATAR_URL: ${{ inputs.avatar-url }}
+        INPUT_BRANCH: ${{ github.head_ref || github.ref_name }}
       
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
@@ -81,7 +86,8 @@ runs:
       run: python "z64packer/z64_dj_datasheet_tool.py" --ci
       shell: bash
 
-    - name: Create GitHub Release
+    - name: Commit and push the changes
+      run: 
       uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ github.token }}
