@@ -84,10 +84,17 @@ runs:
     - name: Copy the output files and push them to the assets branch
       run: |
           cp z64packer/{binaries.zip,z64games.json,z64songs.json,z64musicpacker.properties} $RUNNER_TEMP/
+          
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "<>"
           git config --global --type bool push.autoSetupRemote true
-          git switch --orphan ${{ inputs.assets-branch }}
+
+          if [ `git rev-parse --verify main 2>/dev/null` ]; then
+            git switch ${{ inputs.assets-branch }}
+          else
+            git switch --orphan ${{ inputs.assets-branch }}
+          fi
+          
           cp -rf $RUNNER_TEMP/{binaries.zip,z64games.json,z64songs.json,z64musicpacker.properties} ./
           git rm --cached -r .
           git add binaries.zip z64games.json z64songs.json z64musicpacker.properties
