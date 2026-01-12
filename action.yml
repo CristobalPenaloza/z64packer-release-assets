@@ -90,7 +90,7 @@ runs:
           git config --global --type bool push.autoSetupRemote true
           if git ls-remote --exit-code --heads origin refs/heads/${{ inputs.assets-branch }}; then
             echo "Switching to assets branch..."
-            git switch ${{ inputs.assets-branch }}
+            git switch -c ${{ inputs.assets-branch }} --track origin/${{ inputs.assets-branch }}
           else
             echo "Creating assets branch since it doesn't exist..."
             git switch --orphan ${{ inputs.assets-branch }}
