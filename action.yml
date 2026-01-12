@@ -89,6 +89,8 @@ runs:
     - name: Commit and push the changes
       run: |
           cd z64packer
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "<>"
           git add binaries.zip z64games.json z64songs.json z64musicpacker.properties
           git commit -m "Z64 Packer Assets for #${{ github.event.number }}"
           git pull
