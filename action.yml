@@ -70,7 +70,7 @@ runs:
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: "3.x"
 
     - name: Install Python dependencies
       uses: py-actions/py-dependency-install@v4
@@ -93,3 +93,4 @@ runs:
           git commit -m "Z64 Packer Assets for #${{ github.event.number }}"
           git pull
           git push
+      shell: bash
