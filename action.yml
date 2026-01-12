@@ -87,17 +87,9 @@ runs:
       shell: bash
 
     - name: Commit and push the changes
-      run: 
-      uses: softprops/action-gh-release@v2
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        files: |
-          z64packer/binaries.zip
-          z64packer/z64games.json
-          z64packer/z64songs.json
-          z64packer/z64musicpacker.properties
-        tag_name: z64packer
-        name: Z64 Packer Assets
-        draft: false
-        prerelease: false
+      run: |
+          cd z64packer
+          git add binaries.zip z64games.json z64songs.json z64musicpacker.properties
+          git commit -m "Z64 Packer Assets for #${{ github.event.number }}"
+          git pull
+          git push
