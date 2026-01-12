@@ -85,7 +85,7 @@ runs:
           cp z64packer/{binaries.zip,z64games.json,z64songs.json,z64musicpacker.properties} $RUNNER_TEMP/z64packer
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "<>"
-          git switch -c ${{ assets-branch }} --orphan
+          git switch -c ${{ inputs.assets-branch }} --orphan
           cp z64packer/{binaries.zip,z64games.json,z64songs.json,z64musicpacker.properties} $RUNNER_TEMP/z64packer
           git add .
           git commit -m "Z64 Packer Assets for #${{ github.event.number }}"
