@@ -91,6 +91,6 @@ runs:
           cp -rf $RUNNER_TEMP/{binaries.zip,z64games.json,z64songs.json,z64musicpacker.properties} ./
           git rm --cached -r .
           git add binaries.zip z64games.json z64songs.json z64musicpacker.properties
-          git commit -m "Z64 Packer Assets for #${{ github.event.number }}"
+          git commit -m "Z64 Packer Assets for ${{ github.sha }}"
           git push --force-with-lease
       shell: bash
